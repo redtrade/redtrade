@@ -1,0 +1,75 @@
+version: '3.2'
+services:
+    perimeter-lb:
+        build:
+            context: ./zones/perimeter/perimeter-lb
+        ports:
+            - "80:80"
+        networks:
+            - perimeter
+
+
+    static-lb:
+        build:
+            context: ./zones/static/static-lb
+        networks:
+            - perimeter
+            - static
+    static-web:
+        build:
+            context: ./zones/static/static-web
+        networks:
+            - static
+
+
+    service-lb:
+        build:
+            context: ./zones/service/service-lb
+        networks:
+            - perimeter
+            - service
+    order-service:
+        build:
+            context: ./zones/service/order-service
+        networks:
+            - service
+    ping-service:
+        build:
+            context: ./zones/service/ping-service
+        networks:
+            - service
+
+    ping-agent:
+        build:
+            context: ./zones/agent/ping-agent
+        environment:
+            - REQUESTS_PER_MINUTE=60
+        network:
+            - perimeter
+            - agent
+
+#    zookeeper:
+#        image: wurstmeister/zookeeper
+#        ports:
+#            - "2183:2183"
+#    kafka:
+#        build:
+#            context: ./zones/service/kafka
+#        ports:
+#            - "9092"
+#    redis:
+#        build:
+#            context: ./zones/service/redis
+#        networks:
+#            - service
+#    postgres:
+#        build:
+#            context: ./zones/service/postgres
+#        networks:
+#            - service
+
+networks:
+    perimeter:
+    static:
+    service:
+    agent:
