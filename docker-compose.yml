@@ -33,6 +33,23 @@ services:
             context: ./zones/service/order-service
         networks:
             - service
+    redis-master:
+        image: redis:3
+        networks:
+            - service
+    redis-slave:
+        image: redis:3
+        command: redis-server --slaveof redis-master 6379
+        networks:
+            - service
+    redis-sentinel:
+        build:
+            context: ./zones/service/redis-sentinel
+        environment:
+            - SENTINEL_DOWN_AFTER=5000
+            - SENTINEL_FAILOVER=5000
+        networks:
+            - service
     ping-service:
         build:
             context: ./zones/service/ping-service
@@ -44,29 +61,9 @@ services:
             context: ./zones/agent/ping-agent
         environment:
             - REQUESTS_PER_MINUTE=60
-        network:
+        networks:
             - perimeter
             - agent
-
-#    zookeeper:
-#        image: wurstmeister/zookeeper
-#        ports:
-#            - "2183:2183"
-#    kafka:
-#        build:
-#            context: ./zones/service/kafka
-#        ports:
-#            - "9092"
-#    redis:
-#        build:
-#            context: ./zones/service/redis
-#        networks:
-#            - service
-#    postgres:
-#        build:
-#            context: ./zones/service/postgres
-#        networks:
-#            - service
 
 networks:
     perimeter:
