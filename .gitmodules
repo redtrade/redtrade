@@ -5,5 +5,5 @@
 	path = zones/service/ping-service
 	url = https://github.com/redtrade/ping-service
 [submodule "zones/zones/agent/ping-agent"]
-	path = zones/zones/agent/ping-agent
+	path = zones/agent/ping-agent
 	url = https://github.com/redtrade/ping-agent
