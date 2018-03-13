@@ -1,0 +1,9 @@
+[submodule "zones/service/order-service"]
+	path = zones/service/order-service
+	url = https://github.com/redtrade/order-service
+[submodule "zones/service/ping-service"]
+	path = zones/service/ping-service
+	url = https://github.com/redtrade/ping-service
+[submodule "zones/zones/agent/ping-agent"]
+	path = zones/zones/agent/ping-agent
+	url = https://github.com/redtrade/ping-agent
