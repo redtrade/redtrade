@@ -53,6 +53,11 @@ services:
             context: ./zones/service/elasticsearch
         networks:
             - service
+        healthcheck:
+            test: curl -f http://localhost:9200/_cluster/health
+            interval: 10s
+            timeout: 10s
+            retries: 3
     logstash:
         build:
             context: ./zones/service/logstash
@@ -60,6 +65,11 @@ services:
             - service
         depends_on:
             - elasticsearch
+        healthcheck:
+            test: curl -f http://localhost:9600
+            interval: 10s
+            timeout: 10s
+            retries: 3
     kibana:
         build:
             context: ./zones/service/kibana
@@ -67,6 +77,11 @@ services:
             - service
         depends_on:
             - elasticsearch
+        healthcheck:
+            test: curl -f http://localhost:5601/status
+            interval: 10s
+            timeout: 10s
+            retries: 3
     ping-service:
         build:
             context: ./zones/service/ping-service
