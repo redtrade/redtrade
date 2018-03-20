@@ -53,13 +53,13 @@ services:
             context: ./zones/service/elasticsearch
         networks:
             - service
-        depends_on:
-            - elasticsearch
     logstash:
         build:
             context: ./zones/service/logstash
         networks:
             - service
+        depends_on:
+            - elasticsearch
     kibana:
         build:
             context: ./zones/service/kibana
@@ -81,6 +81,9 @@ services:
         networks:
             - perimeter
             - agent
+        depends_on:
+            - order-service
+            - ping-service
 
 networks:
     perimeter:
