@@ -8,7 +8,6 @@ services:
         networks:
             - perimeter
 
-
     static-lb:
         build:
             context: ./zones/static/static-lb
@@ -20,7 +19,6 @@ services:
             context: ./zones/static/static-web
         networks:
             - static
-
 
     service-lb:
         build:
@@ -50,6 +48,25 @@ services:
             - SENTINEL_FAILOVER=5000
         networks:
             - service
+    elasticsearch:
+        build:
+            context: ./zones/service/elasticsearch
+        networks:
+            - service
+        depends_on:
+            - elasticsearch
+    logstash:
+        build:
+            context: ./zones/service/logstash
+        networks:
+            - service
+    kibana:
+        build:
+            context: ./zones/service/kibana
+        networks:
+            - service
+        depends_on:
+            - elasticsearch
     ping-service:
         build:
             context: ./zones/service/ping-service
