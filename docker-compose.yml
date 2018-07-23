@@ -31,6 +31,8 @@ services:
             context: ./zones/service/order-service
         networks:
             - service
+        depends_on:
+          - mongo
     redis-master:
         image: redis:3
         networks:
@@ -48,6 +50,11 @@ services:
             - SENTINEL_FAILOVER=5000
         networks:
             - service
+    mongo:
+      image: mongo
+      networks:
+        - service
+
     elasticsearch:
         build:
             context: ./zones/service/elasticsearch
@@ -63,8 +70,8 @@ services:
             context: ./zones/service/logstash
         networks:
             - service
-        depends_on:
-            - elasticsearch
+#        depends_on:
+#            - elasticsearch
         healthcheck:
             test: curl -f http://localhost:9600
             interval: 10s
@@ -75,30 +82,36 @@ services:
             context: ./zones/service/kibana
         networks:
             - service
-        depends_on:
-            - elasticsearch
+#        depends_on:
+#            - elasticsearch
         healthcheck:
             test: curl -f http://localhost:5601/status
             interval: 10s
             timeout: 10s
             retries: 3
-    ping-service:
-        build:
-            context: ./zones/service/ping-service
-        networks:
-            - service
+    grafana:
+      build:
+        context: ./zones/service/grafana
+      networks:
+        - service
 
-    ping-agent:
-        build:
-            context: ./zones/agent/ping-agent
-        environment:
-            - REQUESTS_PER_MINUTE=60
-        networks:
-            - perimeter
-            - agent
-        depends_on:
-            - order-service
-            - ping-service
+#    ping-service:
+#        build:
+#            context: ./zones/service/ping-service
+#        networks:
+#            - service
+#
+#    ping-agent:
+#        build:
+#            context: ./zones/agent/ping-agent
+#        environment:
+#            - REQUESTS_PER_MINUTE=60
+#        networks:
+#            - perimeter
+#            - agent
+#        depends_on:
+#            - order-service
+#            - ping-service
 
 networks:
     perimeter:
